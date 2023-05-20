@@ -10,7 +10,7 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.send('the mystery maze shop server is running')
+    res.send('The mystery maze shop server is running')
 })
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qd7bbha.mongodb.net/?retryWrites=true&w=majority`;
@@ -29,7 +29,13 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    const allToysCollection = client.db('mysteryMaze').collection('allToys')
 
+    app.get('/alltoys', async(req, res)=> {
+        const cursor = allToysCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
