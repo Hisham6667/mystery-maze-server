@@ -94,6 +94,22 @@ async function run() {
       res.send(result)
     })
 
+    app.patch('/usertoys/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      const options = { upsert: true}
+      const toy = req.body;
+      const updatedToy = {
+        $set: {
+          price: toy.updatedPrice,
+          stock: toy.updatedStock,
+          details: toy.updatedDetails
+        }
+      }
+      const result = await userToysCollection.updateOne(filter, updatedToy, options);
+      res.send(result)
+    })
+
     // JWT
     app.post('/jwt', (req, res) => {
       const user = req.body;
